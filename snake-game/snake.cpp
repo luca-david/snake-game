@@ -2,7 +2,7 @@
 #include <conio.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include <windows.h>	//im pretty sure this is for GUI apps
+#include <windows.h>	//this is for GUI apps
 #include <time.h>
 
 
@@ -32,6 +32,10 @@ int target_time = 0;
 int first_input = 0;
 
 int first_tap = 1;
+
+int gamemode = 0;
+
+int target_score = -1;
 
 void setup()
 {
@@ -73,7 +77,6 @@ void setup()
 	}
 
 	score = 0;
-	//MODIFICA ASTA INAPOI LA 0 DACA VREI SA FUNCTIONEZE JOCUL
 }
 
 void draw()
@@ -331,10 +334,14 @@ void logic()
 		}
 	}
 
-	if (score == 50)
-	{	
-		gameover = 1;
+	if (gamemode == 2)
+	{
+		if (score == target_score)
+		{
+			gameover = 1;
+		}
 	}
+	
 }
 
 void win_drawing()
@@ -416,6 +423,27 @@ void main()
 	//we need to initialize the variables
 	setup();
 
+	//take input from user, endless mode or score-based?
+	printf_s("Type 1 for endless mode, or 2 for score-based mode: ");
+	scanf_s("%d", &gamemode);
+	if (gamemode == 2)
+	{
+		//score-based
+		printf_s("You selected score-based!\n");
+		printf_s("What is your target score?\t");
+		printf_s("Be ambitious :)  ");
+		scanf_s("%d", &target_score);
+	}
+	else if (gamemode == 1)
+	{	
+		Sleep(1000);
+		printf_s("You selected endless mode!\n");
+		Sleep(2000);
+		printf_s("Have fun!");
+		Sleep(2500);
+	}
+
+
 	while (!gameover)
 	{
 		//functions that will be repeatedly called after an interval
@@ -427,7 +455,7 @@ void main()
 
 	if (gameover)
 	{	
-		if (score == 50)
+		if (score == target_score)
 		{
 			system("cls");
 			//printf_s("You win!\n(^_^)\n");
